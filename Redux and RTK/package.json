@@ -2,7 +2,6 @@
   "name": "redux-and-rtk",
   "version": "1.0.0",
   "main": "index.js",
-  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
@@ -11,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "immer": "^10.1.1",
     "redux": "^5.0.1"
   }
 }
