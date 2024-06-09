@@ -1,96 +1,121 @@
 const redux = require("redux");
 // console.log(redux)
 const createStore = redux.createStore;
-const bindActionCreators = redux.bindActionCreators;
 
-//It is better to create a variables for action-type to minimize typo errors.
-const Create_order = "Create Order";
-const Restocking = "Restocking";
+//* Creating a single reducer function managing all the states becomes difficult.
+//* We can create seperate reducer functions for them with seperate initial states.
+//* Then we can combine them using combineReducers function provided by Redux.
 
-const Create_order_1 = "Create Order 1";
-const Restocking_1 = "Restocking 1";
+//useDispatch will run for an action, that action will be looked up in the reducer and action will be taken on current state.
 
-//This is action creator - one that creates an action.
-function createOrder() {
-  //Action is just an object. In this case, it is the object that is getting returned.
+//Actions
+const Order_1 = "Order1";
+const Order_2 = "Order2";
+const Restock_1 = "Restock1";
+const Restock_2 = "Restock2";
+
+//Action Creators
+function Order1(quantity = 1) {
   return {
-    type: Create_order,
-    quantity: 1,
+    type: Order_1,
+    payload: quantity,
   };
 }
 
-function restocking(qty = 1) {
+function Order2(quantity = 1) {
   return {
-    type: Restocking,
-    payload: qty,
+    type: Order_2,
+    payload: quantity,
   };
 }
 
-function createOrder1(qty = 1) {
+function Restock1(quantity = 1) {
   return {
-    type: Create_order_1,
-    payload: qty,
+    type: Restock_1,
+    payload: quantity,
   };
 }
 
-function restocking1(qty = 1) {
+function Restock2(quantity = 1) {
   return {
-    type: Restocking_1,
-    payload: qty,
+    type: Restock_2,
+    payload: quantity,
   };
 }
 
-const initialState = {
-  numOfCakes: 10,
-  numOfIceCreams: 20,
+//Initial States
+const initialState1 = {
+  product_1: 10,
 };
 
-//reducer function has a prototype - reducer(state = initialState, action) => newState - and it returns a new State when action gets performed on the present state
+const initialState2 = {
+  product_2: 20,
+};
 
-const reducer = (state = initialState, action) => {
+//Reducers
+const Reducer1 = (state = initialState1, action) => {
   switch (action.type) {
-    case Create_order: {
+    case Order_1: {
       return {
-        ...state,
-        numOfCakes: state.numOfCakes - 1,
+        product_1: state.product_1 - action.payload,
       };
     }
-    case Restocking: {
+    case Restock_1: {
       return {
-        ...state,
-        numOfCakes: state.numOfCakes + action.payload,
+        product_1: state.product_1 + action.payload,
       };
-    }
-    case Create_order_1:{
-        return {
-            ...state,
-            numOfIceCreams: state.numOfIceCreams - 1,
-        }
-    }
-    case Restocking_1: {
-        return {
-            ...state, 
-            numOfIceCreams: state.numOfIceCreams + action.payload,
-        }
     }
     default:
       return state;
   }
 };
 
-const store = createStore(reducer);
-const action = bindActionCreators({createOrder, createOrder1, restocking, restocking1}, store.dispatch);
-// console.log(action)
+const Reducer2 = (state = initialState2, action) => {
+  switch (action.type) {
+    case Order_2: {
+      return {
+        product_2: state.product_2 - action.payload,
+      };
+    }
+    case Restock_2: {
+      return {
+        product_2: state.product_2 + action.payload,
+      };
+    }
+    default:
+      return state;
+  }
+};
 
-
-const unsubscribe = store.subscribe(()=>{
-  console.log("Current state is : ", store.getState());
+//Combine reducers using combineReducers
+const combineReducers = redux.combineReducers;
+const rootReducer = combineReducers({
+  Product1: Reducer1,
+  Product2: Reducer2,
 });
 
-action.createOrder();
-action.createOrder1();
-action.restocking(2);
-action.restocking1(2);
-action.createOrder();
+//Assigning rootReducer to store
+const store = createStore(rootReducer);
+
+//* Either use bindActionCreators or simply use store.dispatch(ActionCreator)
+const bindActionCreators = redux.bindActionCreators(
+  { Order1, Order2, Restock1, Restock2 },
+  store.dispatch
+);
+
+const unsubscribe = store.subscribe(() =>
+  console.log("Current State : ", store.getState())
+);
+
+bindActionCreators.Order1(2);
+bindActionCreators.Order2(5);
+bindActionCreators.Restock1(19);
+bindActionCreators.Restock2(10);
 
 unsubscribe();
+
+// OUTPUT
+// Current State :  { Product1: { product_1: 8 }, Product2: { product_2: 20 } }
+// Current State :  { Product1: { product_1: 8 }, Product2: { product_2: 15 } }
+// Current State :  { Product1: { product_1: 27 }, Product2: { product_2: 15 } }
+// Current State :  { Product1: { product_1: 27 }, Product2: { product_2: 25 } }
