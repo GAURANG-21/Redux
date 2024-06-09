@@ -4,6 +4,7 @@ const createStore = redux.createStore;
 
 //It is better to create a variables for action-type to minimize typo errors.
 const Create_order = "Create Order";
+const Restocking = "Restocking";
 
 //This is action creator - one that creates an action.
 function createOrder() {
@@ -11,6 +12,13 @@ function createOrder() {
   return {
     type: Create_order,
     quantity: 1,
+  };
+}
+
+function restocking(qty = 1) {
+  return {
+    type: Restocking,
+    payload: qty,
   };
 }
 
@@ -26,6 +34,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         numOfCakes: state.numOfCakes - 1,
+      };
+    }
+    case Restocking: {
+      return {
+        ...state,
+        numOfCakes: state.numOfCakes + action.payload,
       };
     }
     default:
@@ -48,6 +62,9 @@ store.dispatch({
 });
 store.dispatch(createOrder());
 store.dispatch(createOrder());
+
+store.dispatch(restocking());
+store.dispatch(restocking(5));
 
 unsubscribe();
 
