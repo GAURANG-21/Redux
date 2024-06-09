@@ -26,6 +26,17 @@ function Person(state) {
 // Reducer
 const reducer = (state = person, action) => {
   switch (action.type) {
+
+    // case "change" : {
+    //     return {
+    //         ...state,
+    //         address:{
+    //             ...state.address,
+    //             state: action.payload
+    //         }
+    //     }
+    // }
+
     case "change": {
       return produce(state, (draft) => {
         draft.address.state = action.payload;
