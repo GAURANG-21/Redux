@@ -1,10 +1,14 @@
 const redux = require("redux");
 // console.log(redux)
 const createStore = redux.createStore;
+const bindActionCreators = redux.bindActionCreators;
 
 //It is better to create a variables for action-type to minimize typo errors.
 const Create_order = "Create Order";
 const Restocking = "Restocking";
+
+const Create_order_1 = "Create Order 1";
+const Restocking_1 = "Restocking 1";
 
 //This is action creator - one that creates an action.
 function createOrder() {
@@ -22,8 +26,23 @@ function restocking(qty = 1) {
   };
 }
 
+function createOrder1(qty = 1) {
+  return {
+    type: Create_order_1,
+    payload: qty,
+  };
+}
+
+function restocking1(qty = 1) {
+  return {
+    type: Restocking_1,
+    payload: qty,
+  };
+}
+
 const initialState = {
   numOfCakes: 10,
+  numOfIceCreams: 20,
 };
 
 //reducer function has a prototype - reducer(state = initialState, action) => newState - and it returns a new State when action gets performed on the present state
@@ -42,32 +61,36 @@ const reducer = (state = initialState, action) => {
         numOfCakes: state.numOfCakes + action.payload,
       };
     }
+    case Create_order_1:{
+        return {
+            ...state,
+            numOfIceCreams: state.numOfIceCreams - 1,
+        }
+    }
+    case Restocking_1: {
+        return {
+            ...state, 
+            numOfIceCreams: state.numOfIceCreams + action.payload,
+        }
+    }
     default:
       return state;
   }
 };
 
 const store = createStore(reducer);
-// console.log(store);
+const action = bindActionCreators({createOrder, createOrder1, restocking, restocking1}, store.dispatch);
+// console.log(action)
 
-//This initial state will give "undefined" as the reducer function is having no default value to return as state.
-console.log("Initial State", store.getState());
-const unsubscribe = store.subscribe(() => {
-  console.log("Updated State", store.getState());
+
+const unsubscribe = store.subscribe(()=>{
+  console.log("Current state is : ", store.getState());
 });
 
-//store.dispatch(createOrder()) is same as store.dispatch({type: Create_order})
-store.dispatch({
-  type: Create_order,
-});
-store.dispatch(createOrder());
-store.dispatch(createOrder());
-
-store.dispatch(restocking());
-store.dispatch(restocking(5));
+action.createOrder();
+action.createOrder1();
+action.restocking(2);
+action.restocking1(2);
+action.createOrder();
 
 unsubscribe();
-
-store.dispatch(createOrder());
-
-console.log("Running after unsubscribed", store.getState());
