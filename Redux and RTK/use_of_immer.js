@@ -5,6 +5,10 @@ const { createStore } = require("redux");
 //* It will be helpful when working with nested immutable data structures.
 const produce = require("immer").produce;
 
+const applyMiddlewares = require("redux").applyMiddleware;
+const reduxLogger = require('redux-logger')
+
+
 //Initial State
 const person = {
   name: "Gaurang Agarwal",
@@ -47,11 +51,26 @@ const reducer = (state = person, action) => {
 };
 
 
-const store = createStore(reducer);
 
-console.log("Initial State :", store.getState());
+const logger = reduxLogger.createLogger({
+  predicate: undefined,
+  collapsed:  (getState, action)=>{return action.type==="change"},
+  colors: {
+    title: () => 'inherit',
+    prevState: () => '#9E9E9E',
+    action: () => '#03A9F4',
+    nextState: () => '#4CAF50',
+    error: () => '#F20404',
+    },
+    level: "log",
+    logger: console,
+    logErrors: false
+    });
+  const store = createStore(reducer, applyMiddlewares(logger));
+
+// console.log("Initial State :", store.getState());
 store.dispatch(Person("Uttar Pradesh"));
-console.log("Final State :", store.getState());
+// console.log("Final State :", store.getState());
 
 //Output
 
