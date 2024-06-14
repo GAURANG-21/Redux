@@ -57,7 +57,7 @@ const logger = reduxLogger.createLogger({
   collapsed:  (getState, action)=>{return action.type==="change"},
   colors: {
     title: () => 'inherit',
-    prevState: () => '#9E9E9E',
+    prevState: () => '#ffa34',
     action: () => '#03A9F4',
     nextState: () => '#4CAF50',
     error: () => '#F20404',
