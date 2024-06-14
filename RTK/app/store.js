@@ -11,7 +11,7 @@ const store = configureStore({
   },
   //The middleware object expects list of middlewares used.  
   //* middleware : [list_of_middlewares]
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });
 
 module.exports = store;
