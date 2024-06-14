@@ -3,16 +3,20 @@ const { followerActions } = require("./features/followers/followersSlice.js");
 const {
   subscriberActions,
 } = require("./features/subscribers/subscribersSlice.js");
+const {fetchNews} = require('./features/users/userSlice.js')
 
 console.log("Initial State", store.getState());
 const unsubscribe = store.subscribe(() => {console.log("Updated State", store.getState())});
 
-store.dispatch(followerActions.incrementFollowers());
-store.dispatch(followerActions.incrementFollowers(2));
-store.dispatch(followerActions.decrementFollowers());
+// store.dispatch(followerActions.incrementFollowers());
+// store.dispatch(followerActions.incrementFollowers(2));
+// store.dispatch(followerActions.decrementFollowers());
 
-store.dispatch(subscriberActions.incrementSubscribers());
-store.dispatch(subscriberActions.decrementSubscribers(2));
-store.dispatch(subscriberActions.decrementSubscribers());
+// store.dispatch(subscriberActions.incrementSubscribers());
+// store.dispatch(subscriberActions.decrementSubscribers(2));
+// store.dispatch(subscriberActions.decrementSubscribers());
 
-unsubscribe();
+// console.log(fetchNews)
+store.dispatch(fetchNews())
+
+// unsubscribe();
