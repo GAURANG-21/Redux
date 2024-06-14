@@ -18,6 +18,22 @@ const subscribers = createSlice({
       if (state.noOfSubscribers < 0) state.noOfSubscribers = 0;
     },
   },
+
+  //* Use of extraReducers is: if for each increase in followers, I need to increase the subscriber.
+  //* If I need to update the state of a slice which is dependent on another slice.
+  //! "createSlice.extraReducers" notation has been removed. It now accepts only "builder callback" notation.
+  //!   extraReducers: {
+  //!    // Add reducers that you want to combine here
+  //!   ["subscribers/incrementSubscribers"]: (state) =>
+  //!      (state.noOfSubscribers += 1),
+  //!   },
+
+  extraReducers: (builder) => {
+    // console.log(builder.addCase.toString());
+    builder.addCase("followers/incrementFollowers", (state) => {
+      state.noOfSubscribers += 1;
+    });
+  },
 });
 
 module.exports = subscribers.reducer;

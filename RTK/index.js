@@ -5,7 +5,7 @@ const {
 } = require("./features/subscribers/subscribersSlice.js");
 
 console.log("Initial State", store.getState());
-const unsubscribe = store.subscribe(() => {});
+const unsubscribe = store.subscribe(() => {console.log("Updated State", store.getState())});
 
 store.dispatch(followerActions.incrementFollowers());
 store.dispatch(followerActions.incrementFollowers(2));
