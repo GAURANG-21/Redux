@@ -36,7 +36,6 @@ const subscribers = createSlice({
   },
 });
 
-const subscriberActions = subscribers.actions;
-
 export default subscribers.reducer;
-export {subscriberActions};
+export const { incrementSubscribers, decrementSubscribers } =
+  subscribers.actions;

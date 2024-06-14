@@ -23,4 +23,4 @@ const followers = createSlice({
 });
 
 export default followers.reducer;
-export const followerActions = followers.actions;
+export const { incrementFollowers, decrementFollowers } = followers.actions;
