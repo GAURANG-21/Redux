@@ -5,8 +5,8 @@ const initialState = {
 };
 
 const followers = createSlice({
-  initialState,
   name: "followers",
+  initialState,
   reducers: {
     incrementFollowers: (state, action) => {
       if (action.payload != null) state.noOfFollowers += action.payload;
